@@ -38,6 +38,7 @@ gpgkey=https://packages.microsoft.com/keys/microsoft.asc\n" \
            dotnet-runtime-6.0 \
            libSDL2-2_0-0 \
            steamcmd \
+           tar \
     && zypper modifyrepo --disable --all \
     && rm -rf /var/cache/zypp/* \
     && steamcmd +'quit' \
