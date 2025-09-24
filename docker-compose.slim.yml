@@ -3,6 +3,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.slim
+    image: "firstwhack/barotrauma-server:slim"
     volumes:
       - "baro-gamedir:/home/runner/Steam/steamapps/common/Barotrauma Dedicated Server"
     environment:
@@ -28,6 +29,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.slim
+    image: "firstwhack/barotrauma-server:slim"
     ports:
       - "27015:27015/udp"
       - "27016:27016/udp"
