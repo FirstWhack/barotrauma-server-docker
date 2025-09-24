@@ -93,5 +93,8 @@ CMD steamcmd +'quit' \
         && if [ ! -L "${FIX_LINKPATH}" ] ; then \
             ln -s "${FIX_PATH}" "${FIX_LINKPATH}" ; \
         fi \
+        && curl -Lo patch.tar.gz https://github.com/evilfactory/LuaCsForBarotrauma/releases/download/latest/luacsforbarotrauma_patch_linux_server.tar.gz
+        && tar -xzf patch.tar.gz -C "${GAMEDIR}" \
+        && rm -f patch.tar.gz \
         && "${GAMEDIR}/DedicatedServer"\
     '
