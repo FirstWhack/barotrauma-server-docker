@@ -15,9 +15,14 @@ services:
       if [ -f \"$${GAMEDIR}/config_player.xml\" ]; then
         ids=$(grep -oE 'WorkshopMods/Installed/[0-9]+' \"$${GAMEDIR}/config_player.xml\" | grep -oE '[0-9]+' | sort -u);
         echo \"Found workshop IDs: $$ids\";
+        download_commands=\"\";
         for id in $$ids; do
-          echo \"Downloading workshop item $$id\";
-          steamcmd +login anonymous +workshop_download_item 602960 $$id +quit;
+          echo \"Adding workshop item $$id to download list\";
+          download_commands=\"$$download_commands +workshop_download_item 602960 $$id\";
+        done;
+        echo \"Executing steamcmd with all download commands\";
+        steamcmd +login anonymous $$download_commands +quit;
+        for id in $$ids; do
           dest_dir=\"$${GAMEDIR}/WorkshopMods/Installed/$$id\";
           mkdir -p \"$${dest_dir}\";
           cp -r /root/Steam/steamapps/workshop/content/602960/$$id/* \"$${dest_dir}/\" || true;
@@ -42,5 +47,16 @@ services:
     depends_on:
       mod-loader:
         condition: service_completed_successfully
+  skip-mods:
+    container_name: barotrauma-server-slim
+    build:
+      context: .
+      dockerfile: Dockerfile.slim
+    image: "firstwhack/barotrauma-server:slim"
+    ports:
+      - "27015:27015/udp"
+      - "27016:27016/udp"
+    volumes:
+      - "baro-gamedir:/home/runner/Steam/steamapps/common/Barotrauma Dedicated Server"
 volumes:
   baro-gamedir:
