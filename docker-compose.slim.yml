@@ -6,18 +6,19 @@ services:
       - "baro-gamedir:/home/runner/Steam/steamapps/common/Barotrauma Dedicated Server"
     environment:
       - GAMEDIR=/home/runner/Steam/steamapps/common/Barotrauma\ Dedicated\ Server
-    entrypoint: ["/bin/sh", "-c"]
-    command: |
-      if [ -f "${GAMEDIR}/config_player.xml" ]; then
-        ids=$(grep -oE 'WorkshopMods/Installed/[0-9]+' "${GAMEDIR}/config_player.xml" | grep -oE '[0-9]+' | sort -u);
+    command: >
+      /bin/sh -c "
+      if [ -f \"${GAMEDIR}/config_player.xml\" ]; then
+        ids=$(grep -oE 'WorkshopMods/Installed/[0-9]+' \"${GAMEDIR}/config_player.xml\" | grep -oE '[0-9]+' | sort -u);
         for id in $ids; do
           steamcmd +login anonymous +workshop_download_item 602960 $id +quit;
-          mkdir -p "${GAMEDIR}/Daedalic Entertainment GmbH/Barotrauma/WorkshopMods/Installed/$id";
+          mkdir -p \"${GAMEDIR}/Daedalic Entertainment GmbH/Barotrauma/WorkshopMods/Installed/$id\";
           cp -r /home/runner/Steam/steamapps/workshop/content/602960/$id/* \
-                "${GAMEDIR}/Daedalic Entertainment GmbH/Barotrauma/WorkshopMods/Installed/$id/" || true;
+                \"${GAMEDIR}/Daedalic Entertainment GmbH/Barotrauma/WorkshopMods/Installed/$id/\" || true;
         done;
-        sed -i 's|C:/Users[^"]*Installed/|WorkshopMods/Installed/|g' "${GAMEDIR}/config_player.xml";
+        sed -i 's|C:/Users[^\"]*Installed/|WorkshopMods/Installed/|g' \"${GAMEDIR}/config_player.xml\";
       fi
+      "
 
   barotrauma-dedicated-server:
     container_name: barotrauma-server-slim
