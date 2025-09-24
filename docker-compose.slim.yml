@@ -23,12 +23,12 @@ services:
         echo \"Executing steamcmd with all download commands\";
         steamcmd +login anonymous $$download_commands +quit;
         for id in $$ids; do
-          dest_dir=\"$${GAMEDIR}/WorkshopMods/Installed/$$id\";
+          dest_dir=\"$${GAMEDIR}/LocalMods/$$id\";
           mkdir -p \"$${dest_dir}\";
           cp -r /root/Steam/steamapps/workshop/content/602960/$$id/* \"$${dest_dir}/\" || true;
         done;
         echo \"Mod download complete, updating config_player.xml paths\";
-        sed -i 's|C:/Users[^\"]*Installed/|WorkshopMods/Installed/|g' \"$${GAMEDIR}/config_player.xml\";
+        sed -i 's|C:/Users[^\"]*Installed/|LocalMods/|g' \"$${GAMEDIR}/config_player.xml\";
       fi;
       echo \"Mod-loader task complete, exiting.\";
       exit 0;
