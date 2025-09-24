@@ -48,7 +48,7 @@ services:
       mod-loader:
         condition: service_completed_successfully
   skip-mods:
-    container_name: barotrauma-server-slim
+    container_name: barotrauma-server-slim-skip-mods
     build:
       context: .
       dockerfile: Dockerfile.slim
