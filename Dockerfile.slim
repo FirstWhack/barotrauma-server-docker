@@ -39,6 +39,7 @@ gpgkey=https://packages.microsoft.com/keys/microsoft.asc\n" \
            libSDL2-2_0-0 \
            steamcmd \
            tar \
+           gzip \
     && zypper modifyrepo --disable --all \
     && rm -rf /var/cache/zypp/* \
     && steamcmd +'quit' \
@@ -58,6 +59,8 @@ RUN set -eux \
     && mkdir -p /home/runner/Steam \
     && mkdir -p /home/runner/.steam/sdk32 \
     && mkdir -p /home/runner/.steam/sdk64 \
+    && ln -s /usr/bin/tar /home/runner/tar \
+    && ln -s /usr/bin/gzip /home/runner/gzip \
     && ln -s /usr/lib/steamcmd/linux32/steamclient.so /home/runner/.steam/sdk32/steamclient.so \
     && ln -s /usr/lib/steamcmd/linux64/steamclient.so /home/runner/.steam/sdk64/steamclient.so \
     && mkdir -p "${GAMEDIR}" \
