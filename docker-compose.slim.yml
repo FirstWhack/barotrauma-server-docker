@@ -24,7 +24,9 @@ services:
         done;
         echo \"Mod download complete, updating config_player.xml paths\";
         sed -i 's|C:/Users[^\"]*Installed/|WorkshopMods/Installed/|g' \"$${GAMEDIR}/config_player.xml\";
-      fi
+      fi;
+      echo \"Mod-loader task complete, exiting.\";
+      exit 0;
       "
   barotrauma-dedicated-server:
     container_name: barotrauma-server-slim
@@ -38,6 +40,7 @@ services:
     volumes:
       - "baro-gamedir:/home/runner/Steam/steamapps/common/Barotrauma Dedicated Server"
     depends_on:
-      - mod-loader
+      mod-loader:
+        condition: service_completed_successfully
 volumes:
   baro-gamedir:
