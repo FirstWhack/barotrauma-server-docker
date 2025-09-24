@@ -7,23 +7,25 @@ services:
     volumes:
       - "baro-gamedir:/home/runner/Steam/steamapps/common/Barotrauma Dedicated Server"
     environment:
-      - GAMEDIR="/home/runner/Steam/steamapps/common/Barotrauma Dedicated Server"
+      - GAMEDIR=/home/runner/Steam/steamapps/common/Barotrauma Dedicated Server
+    # command: tail -f /dev/null
     command: >
       /bin/sh -c "
-      if [ -f \"${GAMEDIR}/config_player.xml\" ]; then
-        ids=$(grep -oE 'WorkshopMods/Installed/[0-9]+' \"${GAMEDIR}/config_player.xml\" | grep -oE '[0-9]+' | sort -u);
-        echo \"Found workshop IDs: $ids\";
-        for id in $ids; do
-          echo \"Downloading workshop item $id\";
-          steamcmd +login anonymous +workshop_download_item 602960 $id +quit;
-          mkdir -p \"${GAMEDIR}/Daedalic Entertainment GmbH/Barotrauma/WorkshopMods/Installed/$id\";
-          cp -r /home/runner/Steam/steamapps/workshop/content/602960/$id/* \
-                \"${GAMEDIR}/Daedalic Entertainment GmbH/Barotrauma/WorkshopMods/Installed/$id/\" || true;
+      echo \"GAMEDIR is $$GAMEDIR\";
+      if [ -f \"$${GAMEDIR}/config_player.xml\" ]; then
+        ids=$(grep -oE 'WorkshopMods/Installed/[0-9]+' \"$${GAMEDIR}/config_player.xml\" | grep -oE '[0-9]+' | sort -u);
+        echo \"Found workshop IDs: $$ids\";
+        for id in $$ids; do
+          echo \"Downloading workshop item $$id\";
+          steamcmd +login anonymous +workshop_download_item 602960 $$id +quit;
+          dest_dir=\"$${GAMEDIR}/WorkshopMods/Installed/$$id\";
+          mkdir -p \"$${dest_dir}\";
+          cp -r /root/Steam/steamapps/workshop/content/602960/$$id/* \"$${dest_dir}/\" || true;
         done;
-        sed -i 's|C:/Users[^\"]*Installed/|WorkshopMods/Installed/|g' \"${GAMEDIR}/config_player.xml\";
+        echo \"Mod download complete, updating config_player.xml paths\";
+        sed -i 's|C:/Users[^\"]*Installed/|WorkshopMods/Installed/|g' \"$${GAMEDIR}/config_player.xml\";
       fi
       "
-
   barotrauma-dedicated-server:
     container_name: barotrauma-server-slim
     build:
@@ -37,6 +39,5 @@ services:
       - "baro-gamedir:/home/runner/Steam/steamapps/common/Barotrauma Dedicated Server"
     depends_on:
       - mod-loader
-
 volumes:
   baro-gamedir:
