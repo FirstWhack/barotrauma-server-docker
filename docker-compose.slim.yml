@@ -1,5 +1,8 @@
 services:
   mod-loader:
+    build:
+      context: .
+      dockerfile: Dockerfile.slim
     volumes:
       - "baro-gamedir:/home/runner/Steam/steamapps/common/Barotrauma Dedicated Server"
     environment:
