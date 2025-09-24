@@ -1,6 +1,5 @@
 services:
   mod-loader:
-    image: "yanwk/barotrauma-server:slim"
     volumes:
       - "baro-gamedir:/home/runner/Steam/steamapps/common/Barotrauma Dedicated Server"
     environment:
@@ -21,7 +20,6 @@ services:
 
   barotrauma-dedicated-server:
     container_name: barotrauma-server-slim
-    image: "yanwk/barotrauma-server:slim"
     build:
       context: .
       dockerfile: Dockerfile.slim
