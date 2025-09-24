@@ -4,6 +4,8 @@ services:
     image: "yanwk/barotrauma-server:slim"
     volumes:
       - "baro-gamedir:/home/runner/Steam/steamapps/common/Barotrauma Dedicated Server"
+    environment:
+      - GAMEDIR=/home/runner/Steam/steamapps/common/Barotrauma\ Dedicated\ Server
     entrypoint: ["/bin/sh", "-c"]
     command: |
       if [ -f "${GAMEDIR}/config_player.xml" ]; then
