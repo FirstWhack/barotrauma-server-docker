@@ -1,11 +1,10 @@
-version: "3"
 services:
   mod-loader:
     image: "yanwk/barotrauma-server:slim"
     volumes:
       - "baro-gamedir:/home/runner/Steam/steamapps/common/Barotrauma Dedicated Server"
     environment:
-      - GAMEDIR=/home/runner/Steam/steamapps/common/Barotrauma\ Dedicated\ Server
+      - GAMEDIR="/home/runner/Steam/steamapps/common/Barotrauma Dedicated Server"
     command: >
       /bin/sh -c "
       if [ -f \"${GAMEDIR}/config_player.xml\" ]; then
